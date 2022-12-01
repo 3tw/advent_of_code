@@ -1,8 +1,8 @@
 // Day 1: Calorie Counting
 // https://adventofcode.com/2022/day/1
 
-use crate::utils;
 use crate::constants::RUN;
+use crate::utils;
 
 pub fn run() -> (String, String) {
     let mut list_of_sums: Vec<u32> = Vec::new();
@@ -22,9 +22,9 @@ pub fn run() -> (String, String) {
             break;
         }
     }
-    
+
     list_of_sums.sort_by(|a, b| b.cmp(a));
     let top_three_sums = list_of_sums[0] + list_of_sums[1] + list_of_sums[2];
-    
+
     return (list_of_sums[0].to_string(), top_three_sums.to_string());
 }

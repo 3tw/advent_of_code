@@ -8,14 +8,14 @@ fn main() {
 
     // Greeting
     println!(
-        "\nGo ahead, choose the day! \nThere are {} days available. \nYou can always exit by typing 'q'. \n\nHave fun ! \n", days_total
+        "\nGo ahead, choose the day! \nThere are {} days available. \n\nHave fun ! \n", days_total
     );
 
     loop {
         // Get user input
         let user_input = utils::get_input();
 
-        // Check if the input is a number that corresponds to the possible solutions 
+        // Check if the input is a number that corresponds to the possible solutions
         // This number can never  n < 1 or 25 < n
         match user_input.parse::<u32>() {
             Ok(number) => {
@@ -31,9 +31,6 @@ fn main() {
                 }
             }
             Err(_) => {
-                if user_input.to_lowercase() == String::from("q") {
-                    break;
-                };
                 println!("To select a day you must type in a number.")
             }
         };
