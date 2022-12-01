@@ -1,7 +1,6 @@
 pub mod day_1;
 
 pub struct AoC;
-
 impl AoC {
     pub fn count_days() -> usize {
         return 1;

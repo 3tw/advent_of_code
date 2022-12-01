@@ -24,7 +24,7 @@ pub fn run() -> (String, String) {
     }
 
     list_of_sums.sort_by(|a, b| b.cmp(a));
-    let top_three_sums = list_of_sums[0] + list_of_sums[1] + list_of_sums[2];
+    let sum_of_top_three: u32 = list_of_sums[0 .. 3].iter().sum();
 
-    return (list_of_sums[0].to_string(), top_three_sums.to_string());
+    return (list_of_sums[0].to_string(), sum_of_top_three.to_string());
 }
