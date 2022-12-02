@@ -6,7 +6,7 @@ pub fn get_input() -> String {
         .read_line(&mut input)
         .expect("Failed to read user input");
 
-    let input = match input.trim().parse::<String>() {
+    let input = match input.parse::<String>() {
         Ok(input) => input,
         Err(_) => String::from("Failed to parse user input as String."),
     };

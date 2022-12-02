@@ -1,1 +1,1 @@
-pub const RUN: &str = "run";
+pub const DAYS_SOLVED: usize = 2;

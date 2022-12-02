@@ -1,17 +1,16 @@
 pub mod day_1;
+pub mod day_2;
+use crate::constants::DAYS_SOLVED;
 
 pub struct AoC;
 impl AoC {
     pub fn count_days() -> usize {
-        return 1;
+        return DAYS_SOLVED;
     }
-
     pub fn run(index: usize) -> (String, String) {
-        let days: [fn() -> (String, String); 1] = [day_1::run];
+        let days: [fn() -> (String, String); DAYS_SOLVED] = [day_1::run, day_2::run];
         match days.get(index - 1) {
             Some(problem) => {
-                println!("\nYou have chosen day {}.", index);
-                println!("Don't forget to type 'run' to confirm the input for the puzzle");
                 problem()
             }
             None => panic!("This day doesn't exist."),

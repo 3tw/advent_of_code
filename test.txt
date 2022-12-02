@@ -1,0 +1,85 @@
+// Day 2: Rock Paper Scissors
+// https://adventofcode.com/2022/day/2
+
+use std::cmp::PartialEq;
+use std::str::FromStr;
+use strum_macros::EnumString;
+
+pub fn run() -> (String, String) {
+    // Define sign variants
+    #[derive(Debug, EnumString, PartialEq)]
+    enum Sign {
+        R,
+        P,
+        S,
+    }
+
+    fn map_sign(input: &str) -> Sign {
+        let sign = match input {
+            "A" | "X" => Sign::from_str("R"),
+            "B" | "Y" => Sign::from_str("P"),
+            "C" | "Z" => Sign::from_str("S"),
+            _ => panic!("Could not parse the sign"),
+        };
+        return sign.unwrap();
+    }
+
+    fn map_sign_part_2(input: &str, opponent: Sign) -> Sign {
+        let sign = match input {
+            "A" | "X" => Sign::from_str("R"),
+            "B" | "Y" => Sign::from_str("P"),
+            "C" | "Z" => Sign::from_str("S"),
+            _ => panic!("Could not parse the sign"),
+        };
+        return sign.unwrap();
+    }
+
+    fn get_sign_points(sign: &Sign) -> u32 {
+        return match sign {
+            Sign::R => 1,
+            Sign::P => 2,
+            Sign::S => 3,
+        };
+    }
+
+    fn get_match_points(me: Sign, opponent: Sign) -> u32 {
+        if me == opponent {
+            return 3;
+        }
+        if (me == Sign::R && opponent == Sign::S)
+            || (me == Sign::P && opponent == Sign::R)
+            || (me == Sign::S && opponent == Sign::P)
+        {
+            return 6;
+        }
+        return 0;
+    }
+
+    // Part 1
+    let rounds = include_str!("input.txt")
+        .lines()
+        .map(|round| {
+            let mut round = round.split(" ");
+            let opponent = map_sign(round.next().unwrap());
+            let me = map_sign(round.next().unwrap());
+            return get_sign_points(&me) + get_match_points(me, opponent);
+        })
+        .collect::<Vec<u32>>();
+
+    let sum_of_rounds = rounds.into_iter().sum::<u32>();
+
+    // Part 2
+    let rounds_part_2 = include_str!("input.txt")
+        .lines()
+        .map(|round| {
+            let mut round = round.split(" ");
+            let opponent = map_sign(round.next().unwrap());
+            let me = map_sign_part_2(round.next().unwrap(), opponent);
+            return get_sign_points(&me) + get_match_points(me, opponent);
+        })
+        .collect::<Vec<u32>>();
+
+    let sum_of_rounds_2 = rounds_part_2.into_iter().sum::<u32>();
+
+    return (sum_of_rounds.to_string(), sum_of_rounds.to_string());
+}
