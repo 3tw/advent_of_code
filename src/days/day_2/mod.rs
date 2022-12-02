@@ -8,6 +8,9 @@ https://therenegadecoder.com/code/rock-paper-scissors-using-modular-arithmetic/
 */
 
 pub fn run() -> (String, String) {
+    println!("{}", (1 - 4) % 3);
+    println!("{}", (2 - 4) % 3);
+    println!("{}", (3 - 4) % 3);
     fn map_sign(input: &str) -> u8 {
         // Map strings to enable modulo solution and to match the sign with the correct values
         return match input {
@@ -19,6 +22,7 @@ pub fn run() -> (String, String) {
     }
 
     fn map_sign_part_2(me: &str, opponent: u8) -> u8 {
+        // Could be improved
         return match me {
             "X" => {
                 if opponent == 1 {
@@ -35,13 +39,6 @@ pub fn run() -> (String, String) {
             }
             _ => panic!("Could not parse the sign"),
         };
-        // let sign = match input {
-        //     "A" | "X" => Sign::from_str("R"),
-        //     "B" | "Y" => Sign::from_str("P"),
-        //     "C" | "Z" => Sign::from_str("S"),
-        //     _ => panic!("Could not parse the sign"),
-        // };
-        // return sign.unwrap();
     }
 
     fn get_match_points(me: u8, opponent: u8) -> u8 {
@@ -64,7 +61,6 @@ pub fn run() -> (String, String) {
             return me + get_match_points(me, opponent);
         })
         .collect();
-
     let sum_of_rounds = rounds.into_iter().map(|i| i as u32).sum::<u32>();
 
     // Part 2
@@ -77,9 +73,7 @@ pub fn run() -> (String, String) {
             return me + get_match_points(me, opponent);
         })
         .collect();
-
     let sum_of_rounds_2 = rounds_part_2.into_iter().map(|i| i as u32).sum::<u32>();
 
-    // let sum_of_rounds = "ss";
     return (sum_of_rounds.to_string(), sum_of_rounds_2.to_string());
 }
