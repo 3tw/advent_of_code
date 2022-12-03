@@ -1,1 +1,1 @@
-pub const DAYS_SOLVED: usize = 2;
+pub const DAYS_SOLVED: usize = 3;
