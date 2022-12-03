@@ -1,18 +1,15 @@
 // Day 2: Rock Paper Scissors
 // https://adventofcode.com/2022/day/2
 
-/* My initial attempt was to write control flows, which turned out to be very verbose.
+/* My initial attempt was to write code through variety of match/if statements, which quickly turned out to be verbose.
 Instead, I decided to explore modulo operator to establish cyclical dependency between Rock, Paper and Scissors.
 I achieved this goal with the help of this article:
 https://therenegadecoder.com/code/rock-paper-scissors-using-modular-arithmetic/
 */
 
 pub fn run() -> (String, String) {
-    println!("{}", (1 - 4) % 3);
-    println!("{}", (2 - 4) % 3);
-    println!("{}", (3 - 4) % 3);
+  // Map strings to enable modulo solution and to match the sign with the correct values
     fn map_sign(input: &str) -> u8 {
-        // Map strings to enable modulo solution and to match the sign with the correct values
         return match input {
             "A" | "X" => 1, // Rock
             "B" | "Y" => 2, // Paper
@@ -22,21 +19,10 @@ pub fn run() -> (String, String) {
     }
 
     fn map_sign_part_2(me: &str, opponent: u8) -> u8 {
-        // Could be improved
         return match me {
-            "X" => {
-                if opponent == 1 {
-                    return 3;
-                }
-                return opponent - 1;
-            }
+            "X" => (opponent + 1) % 3 + 1,
             "Y" => opponent,
-            "Z" => {
-                if opponent == 3 {
-                    return 1;
-                }
-                return opponent + 1;
-            }
+            "Z" => opponent % 3 + 1,
             _ => panic!("Could not parse the sign"),
         };
     }
@@ -50,7 +36,7 @@ pub fn run() -> (String, String) {
         }
         return 6;
     }
-
+    
     // Part 1
     let rounds: Vec<u8> = include_str!("input.txt")
         .lines()
