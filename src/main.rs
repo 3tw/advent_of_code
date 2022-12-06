@@ -1,12 +1,13 @@
 mod constants;
 mod days;
 mod utils;
+use crate::constants::DAYS_SOLVED;
 use crate::days::AoC;
 use std::env;
 
 fn main() {
     env::set_var("RUST_BACKTRACE", "1");
-    let days_total = AoC::count_days();
+    let days_total = DAYS_SOLVED;
 
     // Greeting
     println!(
