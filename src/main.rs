@@ -1,19 +1,13 @@
-mod constants;
 mod days;
 mod utils;
-use crate::constants::DAYS_SOLVED;
 use crate::days::AoC;
 use std::env;
 
 fn main() {
     env::set_var("RUST_BACKTRACE", "1");
-    let days_total = DAYS_SOLVED;
 
     // Greeting
-    println!(
-        "\nGo ahead, choose the day! \nThere are {} days available. \n\nHave fun ! \n",
-        days_total
-    );
+    println!("\nGo ahead, choose the day!  \n\nHave fun ! \n");
 
     loop {
         // Get user input
@@ -23,14 +17,15 @@ fn main() {
         This number can never  n < 1 or 25 < n */
         match user_input.trim().parse::<u32>() {
             Ok(number) => {
-                if number > 0 && number <= days_total as u32 {
-                    let (part_one, part_two) = AoC::run(number as usize);
-                    println!(
+                // if number > 0 {
+                if let Ok(value) = AoC::run(number as usize) {
+                    let (part_one, part_two) = value;
+                     println!(
                         "Solutions to day {} \nPart one --> {} \nPart two --> {}",
                         number, part_one, part_two
                     );
                 } else {
-                    println!("\nTry again. Pick a number between 1 and {}", days_total);
+                    println!("\nTry again. Pick a day between 1 and 25.");
                     continue;
                 }
             }

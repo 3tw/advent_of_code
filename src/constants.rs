@@ -1,1 +1,0 @@
-pub const DAYS_SOLVED: usize = 6;
