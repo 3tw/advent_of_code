@@ -1,107 +1,92 @@
-// Day 7: No Space Left On Device
-// https://adventofcode.com/2022/day/7
+// Day 8: Treetop Tree House
+// https://adventofcode.com/2022/day/8
 
-mod file_system;
 mod utils;
-
-use crate::days::day_7::file_system::Dir;
-use crate::days::day_7::utils::{parse_command, parse_content};
+use crate::days::day_8::utils::{first_or_last};
+use grid::*;
 use std::collections::HashMap;
 
 pub fn run() -> (String, String) {
     let input: Vec<&str> = include_str!("input.txt").lines().collect();
+    let mut grid: Grid<u8> = Grid::new(0, 0);
+    for line in input {
+        grid.push_row(
+            line.as_bytes()
+                .into_iter()
+                .map(|&byte| (byte as char).to_digit(10).unwrap() as u8)
+                .collect::<Vec<u8>>(),
+        );
+    }
+    let (rows, columns) = grid.size();
+    let mut visible_trees = rows * 2 + columns * 2 - 4;
+    let mut peaks: HashMap<String, u8> = HashMap::new();
 
-    // History
-    let mut history: Vec<String> = Vec::new();
+    for row_number in 1..rows - 1 {
+        // ltr
+        let row_indexed = grid
+            .iter_row(row_number)
+            .enumerate()
+            .collect::<Vec<(usize, &u8)>>();
 
-    // Setup filesystem
-    let mut file_system = HashMap::new();
-    file_system.insert("/".to_string(), Dir::new(String::from("/")));
-    history.push("".to_string());
-
-    // Initialize loop
-    let mut loop_index = 0;
-    while loop_index < input.len() {
-        let line = input[loop_index];
-
-        if let Some(cmd) = parse_command(line) {
-            let (action, target) = cmd;
-
-            // Change directory
-            if action == "cd" {
-                if target == "/" {
-                    // pwd = 0;
-                    history.clear();
-                    history.push("".to_string());
-                } else if target == ".." {
-                    history.pop();
-                } else {
-                    history.push(target.to_string())
-                }
-                loop_index += 1;
-                continue;
+        let mut current_max: u8 = *row_indexed[0].1;
+        for (i, v) in &row_indexed {
+            if **v > current_max && !first_or_last(*i, columns) {
+                current_max = **v;
+                peaks.insert(row_number.to_string() + &i.to_string(), **v);
             }
+        }
+        // rtl
+        let row_indexed = grid
+            .iter_row(row_number)
+            .enumerate()
+            .rev()
+            .collect::<Vec<(usize, &u8)>>();
 
-            // List content
-            if action == "ls" {
-                // Get contents
-                loop {
-                    loop_index += 1;
-                    if loop_index == input.len() {
-                        break;
-                    }
-                    if let Some(_) = parse_command(input[loop_index]) {
-                        break;
-                    }
-                    let (a, b) = parse_content(input[loop_index], 0);
-                    match a {
-                        "dir" => {
-                            let name = history.join("/") + "/" + b;
-                            file_system.insert(name.to_string(), Dir::new(String::from(b)));
-                        }
-                        _ => {
-                            let key = history.join("/");
-                            if let Some(item) = file_system.get_mut(&key) {
-                                item.files.push((String::from(b), String::from(a)));
-                                item.size += a.parse::<usize>().unwrap();
-                            }
-                            if let Some(item) = file_system.get_mut("/") {
-                                item.files.push((String::from(b), String::from(a)));
-                                item.size += a.parse::<usize>().unwrap();
-                            }
-
-                            // Update parent directories
-                            for i in 1..history.len() {
-                                let key = history[0..i].join("/");
-                                if let Some(item) = file_system.get_mut(&key) {
-                                    item.size += a.parse::<usize>().unwrap();
-                                }
-                            }
-                        }
-                    }
-                }
-                continue;
+        let mut current_max: u8 = *row_indexed[0].1;
+        for (i, v) in &row_indexed {
+            if **v > current_max && !first_or_last(*i, columns) {
+                current_max = **v;
+                peaks.insert(row_number.to_string() + &i.to_string(), **v);
             }
-        } else {
-            panic!("The line is not a command")
         }
     }
 
-    // Part 1
-    let size_part_1 = file_system
-        .values()
-        .filter(|&dir| dir.size < 100_000 as usize)
-        .map(|i| i.size)
-        .sum::<usize>();
+    for column_number in 1..columns - 1 {
+        // ttb
+        let column_indexed = grid
+            .iter_col(column_number)
+            .enumerate()
+            .collect::<Vec<(usize, &u8)>>();
 
-    // Part 2
-    let free_space = 70_000_000 - file_system.get("/").unwrap().size;
-    let size_part_2 = file_system
-        .values()
-        .filter(|dir| free_space + dir.size > 30_000_000)
-        .map(|i| i.size)
-        .min()
-        .unwrap();
+        let mut current_max: u8 = *column_indexed[0].1;
+        for (i, v) in &column_indexed {
+            if **v > current_max && !first_or_last(*i, rows) {
+                current_max = **v;
+                peaks.insert(i.to_string() + &column_number.to_string(), **v);
+            }
+        }
 
-    return (size_part_1.to_string(), size_part_2.to_string());
+        // btt
+        let column_indexed = grid
+            .iter_col(column_number)
+            .enumerate()
+            .rev()
+            .collect::<Vec<(usize, &u8)>>();
+        println!("{:?}", column_indexed);
+
+        let mut current_max: u8 = *column_indexed[0].1;
+        for (i, v) in &column_indexed {
+            if **v > current_max && !first_or_last(*i, rows) {
+                current_max = **v;
+                peaks.insert(i.to_string() + &column_number.to_string(), **v);
+            }
+        }
+    }
+
+    println!("Side {:?}", visible_trees);
+    println!("Visible {:?}", peaks.len());
+    visible_trees += peaks.len();
+    println!("{:?}", peaks);
+
+    return (visible_trees.to_string(), "size_part_2".to_string());
 }

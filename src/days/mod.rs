@@ -5,6 +5,8 @@ pub mod day_4;
 pub mod day_5;
 pub mod day_6;
 pub mod day_7;
+pub mod day_8;
+pub mod day_9;
 
 pub struct AoC;
 impl AoC {
@@ -17,6 +19,8 @@ impl AoC {
             day_5::run,
             day_6::run,
             day_7::run,
+            day_8::run,
+            day_9::run,
         ];
         match days.get(index - 1) {
             Some(problem) => Ok(problem()),
