@@ -16,8 +16,9 @@ pub fn run() -> (String, String) {
         // Get current value
         signal_strength += calculate_signal_strength(cycle, register);
         /*
-         * Push pixel to CRT
-         * Cycle 1 starts drawing at pixel 0,
+         * Push pixel to CRT row, which is 40 pixels long
+         * This means cycle 1 starts drawing at pixel 0, cycle 2 at pixel 1 etc. until cycle 40.
+         * Cycle 41 starts again at pixel 0 etc.
          */
         crt_row.push(draw_pixel((cycle as i32 - 1) % 40, register));
         if line == "noop" {
