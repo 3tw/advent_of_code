@@ -34,22 +34,23 @@ impl Monkey {
      *
      * Each instruction is a tuple (u8, u64) with
      * the number of target monkey (u8)
-     * and the item itself (u64)
+     * and the item itself (u32)
+     *
+     * Because numbers get very large in part 2, we divide the number by the largest common denominator,
+     * which we get as a product of monkey's divisors used in "match item % self.divisor" (line 51)
      */
-    pub fn process(&mut self, divide: bool) -> Vec<(u8, u64)> {
+    pub fn process(&mut self, operation: &str, n: u64) -> Vec<(u8, u64)> {
         let mut move_queue: Vec<(u8, u64)> = vec![];
         for _ in 0..self.items.len() {
             let item = self.items.pop_front().unwrap();
-            
-            if divide == true {
-              let item: u64 = (self.inspect(item) as f32 / 3.).floor() as u64;
-  
-              match item % self.divisor {
-                  0 => move_queue.push((self.target.0, item)),
-                  _ => move_queue.push((self.target.1, item)),
-              }
-            } else {
-              
+            let item: u64 = match operation {
+                "divide" => self.inspect(item) / n,
+                _ => self.inspect(item) % n,
+            };
+
+            match item % self.divisor {
+                0 => move_queue.push((self.target.0, item)),
+                _ => move_queue.push((self.target.1, item)),
             }
             self.inspect_count += 1
         }
@@ -65,8 +66,7 @@ impl Monkey {
 
         let operation = self.inspect_args.0.clone();
         match operation.as_str() {
-            "*" => return {println!("{:?}/{}",item,b);
-              item * b},
+            "*" => return item * b,
             "/" => return item / b,
             "+" => return item + b,
             _ => return item - b,
