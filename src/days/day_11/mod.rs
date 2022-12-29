@@ -1,5 +1,5 @@
-// Day 10: Cathode-Ray Tube
-// https://adventofcode.com/2022/day/10
+// Day 11: Monkey in the Middle
+// https://adventofcode.com/2022/day/11
 
 mod monkey;
 use itertools::Itertools;
